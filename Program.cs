@@ -36,10 +36,15 @@ namespace Quest
                     4, 20
                 );
 
+                // Create a new Hat
+                Hat hat = new Hat();
+                hat.ShininessLevel = 7;
+
+                // Create a new Robe
                 Robe myRobe = new Robe
                 {
                     Colors = new List<string> { "Pink", "Yellow", "Red" },
-                    Length = 42
+                    Length = 55
                 };
 
                 // "Awesomeness" is like our Adventurer's current "score"
@@ -55,7 +60,7 @@ namespace Quest
                 Console.WriteLine("Please enter your name:");
                 string name = Console.ReadLine();
 
-                Adventurer theAdventurer = new Adventurer(name, myRobe);
+                Adventurer theAdventurer = new Adventurer(name, myRobe, hat);
                 Console.WriteLine(theAdventurer.GetDescription());
 
                 // A list of challenges for the Adventurer to complete
