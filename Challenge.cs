@@ -25,7 +25,7 @@ namespace Quest
         }
 
         // This method will take an Adventurer object and make that Adventurer perform the challenge
-        public void RunChallenge(Adventurer adventurer)
+        public bool RunChallenge(Adventurer adventurer)
         {
             Console.Write($"{_text}: ");
             string answer = Console.ReadLine();
@@ -38,18 +38,19 @@ namespace Quest
             {
                 Console.WriteLine("Well Done!");
 
-                // Note how we access an Adventurer object's property
                 adventurer.Awesomeness += _awesomenessChange;
+                Console.WriteLine(adventurer.GetAdventurerStatus());
+                Console.WriteLine();
+                return true;
             }
             else
             {
                 Console.WriteLine("You have failed the challenge, there will be consequences.");
                 adventurer.Awesomeness -= _awesomenessChange;
+                Console.WriteLine(adventurer.GetAdventurerStatus());
+                Console.WriteLine();
+                return false;
             }
-
-            // Note how we call an Adventurer object's method
-            Console.WriteLine(adventurer.GetAdventurerStatus());
-            Console.WriteLine();
         }
     }
 }

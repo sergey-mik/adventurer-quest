@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 // Every class in the program is defined within the "Quest" namespace
 // Classes within the same namespace refer to one another without a "using" statement
@@ -9,6 +10,7 @@ namespace Quest
     {
         static void Main(string[] args)
         {
+
             bool repeatChallenges = true;
             while (repeatChallenges)
             {
@@ -36,9 +38,14 @@ namespace Quest
                     4, 20
                 );
 
-                // Create a new Hat
-                Hat hat = new Hat();
-                hat.ShininessLevel = 7;
+                // Challenge 1: Guess the number
+                Challenge guessTheNumber = new Challenge("I'm thinking of a number between 1-10. What is it?", 7, 4);
+
+                // Challenge 2: Favorite color
+                Challenge favoriteColor = new Challenge("What is my favorite color? (Enter the corresponding number: 1. Red, 2. Blue, 3. Green, 4. Yellow)", 2, 4);
+
+                // Challenge 3: Find Longest Word
+                Challenge findLongestWord = new Challenge("Find the longest word in a given string.", 3, 9);
 
                 // Create a new Robe
                 Robe myRobe = new Robe
@@ -46,6 +53,12 @@ namespace Quest
                     Colors = new List<string> { "Pink", "Yellow", "Red" },
                     Length = 55
                 };
+
+                // Create a new Hat
+                Hat hat = new Hat();
+                hat.ShininessLevel = 7;
+
+                Prize prize = new Prize("You won a prize!");
 
                 // "Awesomeness" is like our Adventurer's current "score"
                 // A higher Awesomeness is better
@@ -71,13 +84,30 @@ namespace Quest
                 theAnswer,
                 whatSecond,
                 guessRandom,
-                favoriteBeatle
+                favoriteBeatle,
+                guessTheNumber,
+                favoriteColor,
+                findLongestWord
             };
 
-                // Loop through all the challenges and subject the Adventurer to them
-                foreach (Challenge challenge in challenges)
+                // Keep track of the number of successful challenges
+                int successfulChallenges = 0;
+
+                // Keep track of the adventurer's initial awesomeness for each quest
+                int initialAwesomeness = theAdventurer.Awesomeness;
+
+                // Randomly select 5 challenges without repeating
+                Random random = new Random();
+                List<Challenge> selectedChallenges = challenges.OrderBy(x => random.Next()).Take(5).ToList();
+
+                // Loop through the selected challenges and subject the Adventurer to them
+                foreach (Challenge challenge in selectedChallenges)
                 {
-                    challenge.RunChallenge(theAdventurer);
+                    bool success = challenge.RunChallenge(theAdventurer);
+                    if (success)
+                    {
+                        successfulChallenges++;
+                    }
                 }
 
                 // This code examines how Awesome the Adventurer is after completing the challenges
@@ -92,8 +122,12 @@ namespace Quest
                 }
                 else
                 {
+                    prize.ShowPrize(theAdventurer);
                     Console.WriteLine("I guess you did...ok? ...sorta. Still, you should get out of my sight.");
                 }
+
+                // Display the number of successful challenges
+                Console.WriteLine($"You successfully completed {successfulChallenges} out of {selectedChallenges.Count} challenges.");
 
                 // Ask the user if they want to repeat the challenges
                 Console.WriteLine("Do you want to repeat the challenges? (Y/N)");
@@ -101,6 +135,12 @@ namespace Quest
                 if (repeatInput != "Y")
                 {
                     repeatChallenges = false;
+                }
+                else
+                {
+                    // Update the adventurer's initial awesomeness for the next quest
+                    initialAwesomeness += successfulChallenges * 10;
+                    theAdventurer.Awesomeness = initialAwesomeness;
                 }
             }
         }
